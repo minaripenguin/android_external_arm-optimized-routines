@@ -76,6 +76,9 @@
 
 ENTRY (__strlen_aarch64)
 	PTR_ARG (0)
+	
+	cbz srcin, L(return_zero)
+
 	and	tmp1, srcin, MIN_PAGE_SIZE - 1
 	cmp	tmp1, MIN_PAGE_SIZE - 32
 	b.hi	L(page_cross)
@@ -189,5 +192,9 @@ L(page_cross):
 	clz	len, synd
 	lsr	len, len, 1
 	ret
+
+L(return_zero):
+    mov len, #0
+    ret
 
 END (__strlen_aarch64)
